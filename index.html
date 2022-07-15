@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
+    <link rel="icon" type="image/x-icon" href="/Images/icon.png">
     <link rel="stylesheet" href="style.css">
-    <script src="js-file.js" defer></script></head>
+    <script src="js-file.js" defer></script>
+</head>
+
 <body>
-    <h1>Tic Tac Toe</h1>
+    <h1 class="title">Tic Tac Toe</h1>
     <div class="container">
         <div id="00"></div>
         <div id="01"></div>
@@ -22,12 +26,17 @@
     </div>
     <div class="result" onclick="Game.init()"></div>
     <div class="pScore">
-        <div class="xScore">X's score
+        <div class="xScore">
+            <span class="input" role="textbox" contenteditable>X</span>
+            's score
             <p>0</p>
         </div>
-        <div class="oScore">O's score
+        <div class="oScore">
+            <span class="input" role="textbox" contenteditable>O</span>
+            's score
             <p>0</p>
         </div>
     </div>
 </body>
+
 </html>

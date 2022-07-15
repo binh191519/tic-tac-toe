@@ -10,6 +10,10 @@ body {
     font-size: x-large;
 }
 
+h1:hover {
+    cursor: pointer;
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(3, 100px);
@@ -28,7 +32,7 @@ body {
 }
 
 .container div:hover {
-    background-color: aliceblue;
+    cursor: alias;
 }
 
 .result:hover {
@@ -50,4 +54,9 @@ body {
 
 p {
     margin: 0;
+}
+
+input {
+    border: none;
+    width: auto;
 }

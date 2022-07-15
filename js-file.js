@@ -1,18 +1,10 @@
-const Board = (() => {
-    let array = [
-        ["", "", ""],
-        ["", "", ""],
-        ["", "", ""]
-    ];
-    function reset(moves) {
+const gameBoard = (() => {
+    function reset() {
         this.array = [
             ["", "", ""],
             ["", "", ""],
             ["", "", ""]
         ];
-        moves.forEach((move) => {
-            move.textContent = "";
-        })
     };
     function getArray(x, y) {
         return this.array[x][y];
@@ -20,9 +12,6 @@ const Board = (() => {
     function move(x, y, mark) {
         this.array[x][y] = mark;
     };
-    function render(x, y) {
-        document.getElementById(x+y).textContent = this.array[x][y];
-    }
     function winner() {
         if (this.array[0][0] && this.array[0][0] === this.array[1][1] && this.array[0][0] === this.array[2][2]) {
             return this.array[0][0];
@@ -48,55 +37,106 @@ const Board = (() => {
     }
 
     return {
-        reset, getArray, move, render, winner
+        reset, getArray, move, winner
     };
+})();
+
+const displayController = (() => {
+    const moves = document.querySelectorAll(".container div");
+    const xName = document.querySelector(".xScore span");
+    const oName = document.querySelector(".oScore span");
+    const xScore = document.querySelector(".xScore p");
+    const oScore = document.querySelector(".oScore p");
+    const result = document.querySelector(".result");
+
+    function reset() {
+        result.textContent = "";
+        moves.forEach((move) => {
+            move.textContent = "";
+        })
+    }
+    function preview(x, y, mark) {
+        if (mark) {
+            document.getElementById(x + y).textContent = mark;
+            document.getElementById(x + y).style.color = "rgba(0,0,0,0.5)";
+        }
+        else {
+            document.getElementById(x + y).textContent = '';
+        }
+    }
+    function render(x, y) {
+        document.getElementById(x + y).textContent = gameBoard.array[x][y];
+        document.getElementById(x + y).style.color = "black";
+    }
+    function endGame() {
+        if (gameBoard.winner()) {
+            if (gameBoard.winner() === "x") {
+                xScore.textContent = parseInt(xScore.textContent, 10) + 1;
+                result.textContent = xName.textContent + " won! Replay?";
+            }
+            else if (gameBoard.winner() === "o") {
+                oScore.textContent = parseInt(oScore.textContent, 10) + 1;
+                result.textContent = oName.textContent + " won! Replay?";
+            }
+            else result.textContent = "Tie! Replay?";
+        }
+    }
+    return {
+        reset, render, preview, endGame
+    }
 })();
 
 const Game = (() => {
     let turn = 0;
-
-    const xScore = document.querySelector(".xScore p");
-    const oScore = document.querySelector(".oScore p");
-    const result = document.querySelector(".result");
+    const title = document.getElementsByClassName("title");
     const moves = document.querySelectorAll(".container div");
+
+    title[0].addEventListener('click', () => {
+        init();
+    });
     moves.forEach((move) => {
-        move.addEventListener('click', () => {
-            const x = move.id[0];
-            const y = move.id[1];
-            if (!Board.getArray(x, y)) {
-                input(x, y);
-                update();
-                render(x, y);
-                endGame();
-            }
-        })
+        ['click', 'mouseover', 'mouseout'].forEach(evt =>
+            move.addEventListener(evt, () => {
+                const x = move.id[0];
+                const y = move.id[1];
+                if (!gameBoard.getArray(x, y) && !gameBoard.winner()) {
+                    if (evt === 'click') {
+                        input(x, y);
+                        update();
+                        render(x, y);
+                        endGame();
+                    }
+                    else if (evt === 'mouseover') {
+                        displayController.preview(x, y, (turn % 2 === 0) ? "x" : "o");
+                    }
+                    else if (evt === 'mouseout') {
+                        displayController.preview(x, y, "");
+                    }
+                }
+            })
+        );
     })
 
     function init() {
-        Board.reset(moves);
-        result.textContent = "";
+        gameBoard.reset();
+        displayController.reset();
+        turn = 0;
     }
     function input(x, y) {
-        Board.move(x, y, (turn % 2 === 0) ? "x" : "o");        
+        gameBoard.move(x, y, (turn % 2 === 0) ? "x" : "o");
     }
-    function update(x, y) {
+    function update() {
         turn++;
     }
     function render(x, y) {
-        Board.render(x, y);
+        displayController.render(x, y, (turn % 2 === 0) ? "x" : "o");
     }
     function endGame() {
-        if (Board.winner()) {
-            result.textContent = Board.winner().toUpperCase() + " won! Replay?";
-
-            if (Board.winner() === "x") xScore.textContent = parseInt(xScore.textContent, 10)+1;
-            else if (Board.winner() === "o") oScore.textContent = parseInt(oScore.textContent, 10)+1;
-            else result.textContent = "Tie! Replay?";
-        }
+        displayController.endGame();
     }
 
     return {
-        init, input, update, render, endGame, turn
+        init
     };
 })();
 
