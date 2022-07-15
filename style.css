@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
+
+body {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Pangolin', cursive;
+    font-size: x-large;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+    background: url('/Images/tic-tac-toe-board.gif');
+    background-repeat: no-repeat;
+    background-size: 320px;
+    font-size: 3rem;
+}
+
+.container div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container div:hover {
+    background-color: aliceblue;
+}
+
+.result:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.xScore {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+}
+
+.oScore {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+p {
+    margin: 0;
+}
